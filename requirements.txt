@@ -1,0 +1,5 @@
+numpy==1.13.3
+opencv-python==3.3.0.10
+tensorflow-gpu==1.4.0
+Cython==0.27.3
+Pillow==4.3.0

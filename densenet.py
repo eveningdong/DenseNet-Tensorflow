@@ -48,18 +48,17 @@ def dense(inputs, growth, bottleneck=True, stride=1, rate=1, drop=0,
   Returns:
     The dense layer's output.
   """
-  with tf.variable_scope(scope, 'dense_unit', [inputs]) as sc:
-    net = inputs
-    if bottleneck:
-      with tf.variable_scope('bottleneck', values=[net]):
-        net = unit(net, depth=4*growth, kernel=[1,1], stride=stride, 
-          rate=rate, drop=drop)
-    
-    with tf.variable_scope('composite', values=[net]):
-      net = unit(net, depth=growth, kernel=[3,3], stride=stride, rate=rate, 
-        drop=drop)
+  net = inputs
+  if bottleneck:
+    with tf.variable_scope('bottleneck', values=[net]):
+      net = unit(net, depth=4*growth, kernel=[1,1], stride=stride, 
+        rate=rate, drop=drop)
+  
+  with tf.variable_scope('composite', values=[net]):
+    net = unit(net, depth=growth, kernel=[3,3], stride=stride, rate=rate, 
+      drop=drop)
 
-    return net
+  return net
 
 @slim.add_arg_scope
 def transition(inputs, bottleneck=True, compress=0.5, stride=1, rate=1, drop=0,
@@ -77,22 +76,21 @@ def transition(inputs, bottleneck=True, compress=0.5, stride=1, rate=1, drop=0,
   Returns:
     The transition layer's output.
   """
-  with tf.variable_scope(scope, 'trans_unit', [inputs]) as sc:
-    net = inputs
+  net = inputs
 
-    if compress < 1:
-      num_outputs = math.floor(inputs.get_shape().as_list()[3] * compress)
-    else:
-      num_outputs = inputs.get_shape().as_list()[3]
+  if compress < 1:
+    num_outputs = math.floor(inputs.get_shape().as_list()[3] * compress)
+  else:
+    num_outputs = inputs.get_shape().as_list()[3]
 
-    net = unit(net, depth=num_outputs, kernel=[1,1], stride=stride, 
-          rate=rate)
-    net = slim.avg_pool2d(net, kernel_size=[2,2], stride=2, scope='avg_pool')
+  net = unit(net, depth=num_outputs, kernel=[1,1], stride=stride, 
+        rate=rate)
+  net = slim.avg_pool2d(net, kernel_size=[2,2], stride=2, scope='avg_pool')
 
-    if drop > 0:
-      net = slim.dropout(net, keep_prob=1-drop, scope='dropout')
+  if drop > 0:
+    net = slim.dropout(net, keep_prob=1-drop, scope='dropout')
 
-    return net
+  return net
 
 @slim.add_arg_scope
 def stack_dense_blocks(inputs, blocks, growth, bottleneck=True, compress=0.5,
@@ -143,7 +141,7 @@ def densenet(inputs,
              drop=0,
              num_classes=None,
              is_training=True,
-             data_name=None,
+             data_name='imagenet',
              reuse=None,
              scope=None):
   """Generator for DenseNet models.
@@ -160,7 +158,7 @@ def densenet(inputs,
     num_classes: Number of predicted classes for classification tasks.
       If 0 or None, we return the features before the logit layer.
     is_training: Whether batch_norm and drop_out layers are in training mode.
-    data_name: Which model to use.
+    data_name: Which type of model to use.
     reuse: whether or not the network and its variables should be reused. To be
       able to reuse 'scope' must be given.
     scope: Optional variable_scope.
@@ -179,14 +177,14 @@ def densenet(inputs,
       with slim.arg_scope([slim.batch_norm, slim.dropout], 
         is_training=is_training):
         net = inputs
-
-        if data_name is not None and 'cifar' in data_name.lower():
-          net = slim.conv2d(net, growth*2, kernel_size=[3, 3], stride=2, 
-            scope='conv1')
-        else:
+          
+        if data_name is 'imagenet':
           net = slim.conv2d(net, growth*2, kernel_size=[7, 7], stride=2, 
             scope='conv1')
           net = slim.max_pool2d(net, [3, 3], padding='SAME', stride=2, scope='pool1')
+        else:
+          net = slim.conv2d(net, growth*2, kernel_size=[3, 3], stride=2, 
+            scope='conv1')
         
         net = stack_dense_blocks(net, blocks, growth, bottleneck, compress,
           stride, rate, drop)
@@ -208,6 +206,16 @@ def densenet(inputs,
 
 def densenet_121(inputs):
   return densenet(inputs, blocks=densenet_utils.networks['densenet_121'])
+
+def densenet_169(inputs):
+  return densenet(inputs, blocks=densenet_utils.networks['densenet_169'])
+
+def densenet_201(inputs):
+  return densenet(inputs, blocks=densenet_utils.networks['densenet_201'])
+
+def densenet_265(inputs):
+  return densenet(inputs, blocks=densenet_utils.networks['densenet_265'])
+
 
 if __name__ == "__main__":
   x = tf.placeholder(tf.float32, [None, 224, 224, 3])

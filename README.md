@@ -1,7 +1,18 @@
 # DenseNet-Tensorflow
-Reimplementation of DenseNet Image Recognition
+Reimplementation of DenseNet on Image Recognition
 
-This is an (re-)implementation of [DenseNet](https://arxiv.org/abs/1608.06993) in TensorFlow for Image Recognition. The (re-)implementation is based on official [Torch DenseNet](https://github.com/liuzhuang13/DenseNet) with [Tensorflow Slim](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/slim).
+[Densely Connected Convolutional Networks](https://arxiv.org/abs/1608.06993)(DenseNet), won the Best Paper Award on CVPR 2017.
+
+This is an (re-)implementation of DenseNet in TensorFlow for image recognition tasks. The (re-)implementation is based on official [Torch DenseNet](https://github.com/liuzhuang13/DenseNet) with [Tensorflow Slim](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/slim).
+
+In the paper, DenseNet-264 seems to be a typo, since there is no way the number of layers to be an even number. See 121, 169, 201, if you add up 1 + 6 x 2 + 1 + 12 x 2 + 1 + 64 x 2 + 1 + 48 x 2 + 1 + 1 = 265
+
+## Features
+- [x] DenseNet-B, DenseNet-C, DenseNet-BC
+- [x] DenseNet-121, DenseNet-169, DenseNet-201, DenseNet-265
+- [ ] Training on CIFAR
+- [ ] Training on SVHN
+- [ ] Training on ImageNet
 
 ## Requirement
 #### Tensorflow 1.4
@@ -10,6 +21,14 @@ python 3.5
 tensorflow 1.4
 CUDA  8.0
 cuDNN 6.0
+```
+
+#### Tensorflow 1.2
+```
+python 3.5
+tensorflow 1.2
+CUDA  8.0
+cuDNN 5.1
 ```
 
 #### Installation

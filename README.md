@@ -7,7 +7,7 @@ This is an (re-)implementation of DenseNet in TensorFlow for image recognition t
 
 ![DenseNet Table](https://github.com/NanqingD/DenseNet-Tensorflow/blob/master/images/DenseNet_table.png)
 
-In the paper, DenseNet-264 seems to be a typo, since there is no way the number of layers to be an even number. See 121, 169, 201, if you add up, which is 1 + 6 x 2 + 1 + 12 x 2 + 1 + 64 x 2 + 1 + 48 x 2 + 1 + 1 = 265.
+In the paper, DenseNet-264 seems to be a typo, since there is no way the number of layers to be an even number. See DenseNet-121, 169, 201, if you add up, which is 1 + 6 x 2 + 1 + 12 x 2 + 1 + 64 x 2 + 1 + 48 x 2 + 1 + 1 = 265.
 
 ## Features
 - [x] DenseNet-B, DenseNet-C, DenseNet-BC

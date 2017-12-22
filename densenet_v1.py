@@ -139,9 +139,10 @@ def densenet(inputs,
              stride=1,
              rate=1,
              drop=0,
+             weight_decay=0.001,
              num_classes=None,
              is_training=True,
-             data_name='imagenet',
+             data_name=None,
              reuse=None,
              scope=None):
   """Generator for DenseNet models.
@@ -172,49 +173,55 @@ def densenet(inputs,
   """
   with tf.variable_scope(scope, 'densenet', [inputs], reuse=reuse) as sc:
     end_points_collection = sc.original_name_scope + '_end_points'
-    with slim.arg_scope([slim.conv2d, slim.batch_norm, stack_dense_blocks],
-                        outputs_collections=end_points_collection):
-      with slim.arg_scope([slim.batch_norm, slim.dropout], 
-        is_training=is_training):
-        net = inputs
+    with slim.arg_scope(dense_arg_scope(weight_decay=weight_decay)):
+      with slim.arg_scope([slim.conv2d, slim.batch_norm, stack_dense_blocks],
+                          outputs_collections=end_points_collection):
+        with slim.arg_scope([slim.batch_norm, slim.dropout], 
+          is_training=is_training):
+          net = inputs
+            
+          if data_name is 'imagenet':
+            net = slim.conv2d(net, growth*2, kernel_size=[7, 7], stride=2, 
+              scope='conv1')
+            net = slim.max_pool2d(net, [3, 3], padding='SAME', stride=2, 
+              scope='pool1')
+          else:
+            net = slim.conv2d(net, growth*2, kernel_size=[3, 3], stride=2, 
+              scope='conv1')
           
-        if data_name is 'imagenet':
-          net = slim.conv2d(net, growth*2, kernel_size=[7, 7], stride=2, 
-            scope='conv1')
-          net = slim.max_pool2d(net, [3, 3], padding='SAME', stride=2, scope='pool1')
-        else:
-          net = slim.conv2d(net, growth*2, kernel_size=[3, 3], stride=2, 
-            scope='conv1')
-        
-        net = stack_dense_blocks(net, blocks, growth, bottleneck, compress,
-          stride, rate, drop)
+          net = stack_dense_blocks(net, blocks, growth, bottleneck, compress,
+            stride, rate, drop)
 
-        net = slim.batch_norm(net, activation_fn=tf.nn.relu, scope='postnorm')
-        # Convert end_points_collection into a dictionary of end_points.
-        end_points = slim.utils.convert_collection_to_dict(
-            end_points_collection)
-        
-        # Global Avg Pooling
-        net = tf.reduce_mean(net, [1, 2], name='pool5', keep_dims=True)
-        end_points['global_pool'] = net
-        if num_classes is not None and num_classes > 0:
-          net = slim.conv2d(net, num_classes, [1, 1], activation_fn=None,
-                            normalizer_fn=None, scope='logits')
-          end_points[sc.name + '/logits'] = net
-          end_points['predictions'] = slim.softmax(net, scope='predictions')
-        return net, end_points
+          net = slim.batch_norm(net, activation_fn=tf.nn.relu, scope='postnorm')
+          # Convert end_points_collection into a dictionary of end_points.
+          end_points = slim.utils.convert_collection_to_dict(
+              end_points_collection)
+          
+          # Global Avg Pooling
+          net = tf.reduce_mean(net, [1, 2], name='pool5', keep_dims=True)
+          end_points['global_pool'] = net
+          if num_classes is not None and num_classes > 0:
+            net = slim.conv2d(net, num_classes, [1, 1], activation_fn=None,
+                              normalizer_fn=None, scope='logits')
+            end_points[sc.name + '/logits'] = net
+            end_points['predictions'] = slim.softmax(net, scope='predictions')
+          return net, end_points
 
 def densenet_121(inputs):
-  return densenet(inputs, blocks=densenet_utils.networks['densenet_121'])
+  return densenet(inputs, blocks=densenet_utils.networks['densenet_121'], 
+    data_name='imagenet')
 
 def densenet_169(inputs):
-  return densenet(inputs, blocks=densenet_utils.networks['densenet_169'])
+  return densenet(inputs, blocks=densenet_utils.networks['densenet_169'],
+    data_name='imagenet')
 
 def densenet_201(inputs):
-  return densenet(inputs, blocks=densenet_utils.networks['densenet_201'])
+  return densenet(inputs, blocks=densenet_utils.networks['densenet_201'],
+    data_name='imagenet')
 
 def densenet_265(inputs):
-  return densenet(inputs, blocks=densenet_utils.networks['densenet_265'])
+  return densenet(inputs, blocks=densenet_utils.networks['densenet_265'],
+    data_name='imagenet')
 
 
 if __name__ == "__main__":

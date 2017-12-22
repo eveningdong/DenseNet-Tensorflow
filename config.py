@@ -4,13 +4,11 @@ import os
 import argparse
 import numpy as np
 
-IMG_MEAN = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)
-
-BATCH_SIZE = 4
+BATCH_SIZE = 64
 CKPT = 0
 COMPRESS_RATIO = 0.5
-DATA_DIRECTORY = ''
-DATA_NAME = ''
+DATA_DIRECTORY = '/storage/ndong/data/cifar/cifar-10-batches-bin'
+DATA_NAME = 'cifar10'
 DROP_RATE = 0
 GROWTH_RATE = 32
 IGNORE_LABEL = 255
@@ -19,9 +17,9 @@ IS_BOTTLENECK = 'True'
 IS_TRAINING = 'True'
 LEARNING_RATE = 1e-2
 MOMENTUM = 0.9
-NUM_CLASSES = 21
+NUM_CLASSES = 10
 NUM_GPUS = 1
-NUM_LAYERS = 101
+NUM_LAYERS = 121
 NUM_STEPS = 600000
 POWER = 0.9
 RANDOM_SEED = 1234
@@ -32,7 +30,7 @@ SNAPSHOT_DIR = './snapshots'
 SPLIT_NAME = 'train'
 WEIGHT_DECAY = 1e-4
 
-parser = argparse.ArgumentParser(description="DeepLabV3")
+parser = argparse.ArgumentParser(description="DenseNet")
 parser.add_argument("--batch-size", type=int, default=BATCH_SIZE,
                     help="Number of images sent to the network in one step.")
 parser.add_argument("--compress-ratio", type=float, default=COMPRESS_RATIO,
@@ -40,11 +38,13 @@ parser.add_argument("--compress-ratio", type=float, default=COMPRESS_RATIO,
 parser.add_argument("--ckpt", type=int, default=CKPT, 
                     help="Checkpoint to restore.")
 parser.add_argument("--data-dir", type=str, default=DATA_DIRECTORY,
-                    help="Path to the directory containing the PASCAL VOC dataset.")
+                    help="Path to the directory containing the cifar10 dataset.")
 parser.add_argument("--data-name", type=str, default=DATA_NAME,
                     help="Name of the dataset.")
 parser.add_argument("--drop-rate", type=float, default=DROP_RATE,
                     help="Dropout rate in DenseNet unit.")
+parser.add_argument("--freeze-bn", action="store_true",
+                    help="Whether to freeze batch norm params.")
 parser.add_argument("--growth-rate", type=float, default=GROWTH_RATE,
                     help="Dropout rate in DenseNet unit and transition layer.")
 parser.add_argument("--ignore-label", type=int, default=IGNORE_LABEL,
@@ -66,7 +66,7 @@ parser.add_argument("--num-classes", type=int, default=NUM_CLASSES,
 parser.add_argument("--num-gpus", type=int, default=NUM_GPUS,
                     help="Number of GPUs to use.")
 parser.add_argument("--num-layers", type=int, default=NUM_LAYERS,
-                    help="Number of layes in ResNet).")
+                    help="Number of layes in DenseNet).")
 parser.add_argument("--num-steps", type=int, default=NUM_STEPS,
                     help="Number of training steps.")
 parser.add_argument("--power", type=float, default=POWER,

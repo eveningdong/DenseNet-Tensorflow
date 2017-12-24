@@ -7,8 +7,8 @@ import numpy as np
 BATCH_SIZE = 64
 CKPT = 0
 COMPRESS_RATIO = 0.5
-DATA_DIRECTORY = '/storage/ndong/data/cifar/cifar-10-batches-bin'
-DATA_NAME = 'cifar10'
+DATA_DIRECTORY = '/storage/ndong/data/cifar/cifar100'
+DATA_NAME = 'cifar100'
 DROP_RATE = 0
 GROWTH_RATE = 32
 IGNORE_LABEL = 255

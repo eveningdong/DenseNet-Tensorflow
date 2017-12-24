@@ -117,7 +117,7 @@ def distorted_inputs(data_dir, batch_size):
     images: Images. 4D tensor of [batch_size, IMAGE_SIZE, IMAGE_SIZE, 3] size.
     labels: Labels. 1D tensor of [batch_size] size.
   """
-  filenames = ['train.bin']
+  filenames = [os.path.join(data_dir, 'train.bin')]
 
   for f in filenames:
     if not tf.gfile.Exists(f):
@@ -179,10 +179,10 @@ def inputs(data_dir, batch_size, is_training=True):
     labels: Labels. 1D tensor of [batch_size] size.
   """
   if is_training:
-    filenames = ['train.bin']
+    filenames = [os.path.join(data_dir, 'train.bin')]
     num_examples_per_epoch = NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN
   else:
-    filenames = ['test.bin']
+    filenames = [os.path.join(data_dir, 'test.bin')]
     num_examples_per_epoch = NUM_EXAMPLES_PER_EPOCH_FOR_EVAL
 
   for f in filenames:

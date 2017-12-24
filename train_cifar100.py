@@ -61,7 +61,7 @@ def main():
                              blocks=blocks, 
                              growth=args.growth_rate, 
                              drop=0.2,
-                             num_classes=10,
+                             num_classes=100,
                              scope='densenet_L{}_k{}'.format(args.num_layers,
                                args.growth_rate))
   

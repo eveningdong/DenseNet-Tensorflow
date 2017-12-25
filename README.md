@@ -54,3 +54,7 @@ pip3 install -r requirements.txt
 | ----------- |:--------:|:-----------:|
 | paper       | 75.85%   | 24.15%      |
 | repo        | 77.25%   | 22.75%      |
+
+![cifar100_train](https://github.com/NanqingD/DenseNet-Tensorflow/blob/master/images/train_cifar100_L100_k12.png)
+
+![cifar100_val](https://github.com/NanqingD/DenseNet-Tensorflow/blob/master/images/val_cifar100_L100_k12.png)

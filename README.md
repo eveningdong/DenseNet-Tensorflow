@@ -40,17 +40,17 @@ pip3 install -r requirements.txt
 
 ## Performance
 ### CIFAR10
-| L=100, k=12 | Accuracy | Top 1    |
-| ----------- |:--------:|:--------:|
-| paper       | 94.08%   | 5.92     |
-| repo        | 95.75%   | 4.25     |
+| L=100, k=12 | Accuracy | Top 1 Error |
+| ----------- |:--------:|:-----------:|
+| paper       | 94.08%   | 5.92%       |
+| repo        | 95.75%   | 4.25%       |
 
 ![cifar10_train](https://github.com/NanqingD/DenseNet-Tensorflow/blob/master/images/train_cifar10_L100_k12.png)
 
 ![cifar10_val](https://github.com/NanqingD/DenseNet-Tensorflow/blob/master/images/val_cifar10_L100_k12.png)
 
 ### CIFAR100
-| L=100, k=12 | Accuracy | Top 1    |
-| ----------- |:--------:|:--------:|
-| paper       | 75.85%   | 24.15    |
-| repo        |          |          |
+| L=100, k=12 | Accuracy | Top 1 Error |
+| ----------- |:--------:|:-----------:|
+| paper       | 75.85%   | 24.15%      |
+| repo        | 77.25%   | 22.75%      |

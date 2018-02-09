@@ -12,7 +12,7 @@ In the paper, DenseNet-264 seems to be a typo, since there is no way the number 
 ## Features
 - [x] DenseNet-B, DenseNet-C, DenseNet-BC
 - [x] DenseNet-121, DenseNet-169, DenseNet-201, DenseNet-265
-- [ ] Training on CIFAR
+- [x] Training on CIFAR
 - [ ] Training on SVHN
 - [ ] Training on ImageNet
 
